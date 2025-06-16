@@ -6,17 +6,21 @@ on:
     branches:
       - main
       - 'feature/*'
-    
+
+env:
+    mongo-uri: 'mongodb+srv://supercluster.d83jj.mongodb.net/superData'
+    mongo-username: ${{vars.mongo_username}}
+    mongo-password: ${{secrets.mongo_password}}     
 jobs:
     unit-testing:
         name: Unit Testing
         runs-on: ubuntu-latest
         steps:
         - name: Checkout Repository
-          uses: actions/checkout@v4
+          uses: actions/checkout@v4.2.2
 
         - name: Setup NodeJS Version
-          uses: actions/setup-node@v3
+          uses: actions/setup-node@v4.4.0
           with:
             node-version: 20
     
