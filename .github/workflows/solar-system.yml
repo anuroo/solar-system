@@ -17,10 +17,10 @@ jobs:
         strategy:
           fail-fast: false
           matrix:
-            nodejs_version: [24,23,22]
+            nodejs_version: [22,21,20]
             os: [ubuntu-latest,windows-latest,macos-latest]
             exclude: 
-                - nodeJs_version: 22
+                - nodeJs_version: 20
         runs-on: ${{matrix.os}}
         steps:
         - name: Checkout Repository
