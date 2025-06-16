@@ -15,9 +15,10 @@ jobs:
     unit-testing:
         name: Unit Testing
         strategy:
+          fail-fast: false
           matrix:
             nodejs_version: [24,23,22]
-            os: [ubuntu-latest,windos-latest,macos-latest]
+            os: [ubuntu-latest,windows-latest,macos-latest]
             exclude: 
                 - nodeJs_version: 22
         runs-on: ${{matrix.os}}
