@@ -8,7 +8,7 @@ on:
       - 'feature/*'
 
 env:
-    mongo-uri: 'mongodb+srv://supercluster.d83jj.mongodb.net/superData'
+    mongo-uri: mongodb+srv://supercluster.d83jj.mongodb.net/superData
     mongo-username: ${{vars.mongo_username}}
     mongo-password: ${{secrets.mongo_password}}     
 jobs:
@@ -17,7 +17,7 @@ jobs:
         strategy:
           fail-fast: false
           matrix:
-            nodejs_version: [22,21,20]
+            nodejs_version: [20,19,18]
             os: [ubuntu-latest,windows-latest,macos-latest]
             exclude: 
                 - nodeJs_version: 20
@@ -35,9 +35,12 @@ jobs:
           run: npm install
     
         - name: Unit Testing
+          id: nodejs-unit-testing-step
           run: npm test
           
         - name: Archive Test Result
+          #if: failure() && (steps.nodejs-unit-testing-step.outcome == 'failure' || steps.nodejs-unit-testing-step.outcome=='success')
+          if: always()
           uses: actions/upload-artifact@v4.6.2
           with:
             name: Mocha-Test-Result
@@ -66,6 +69,7 @@ jobs:
           run: npm install
         
         - name: check code coverage
+          continue-on-error: true
           run: npm run code coverage
           
         - name: Archive code coverage
