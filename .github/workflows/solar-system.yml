@@ -71,7 +71,7 @@ jobs:
           -  name: Docker Image tetsing
              run: |
               docker images
-              docker run --name solar-system -d \
+              docker run --name solar-system-app -d \
                 -p 3000:3000 \
                 -e MONGO-URI=${{env.mongo-uri}} \
                 -e MONGO-USERNAME=${{ENV.mongo-username}} \
@@ -83,6 +83,12 @@ jobs:
 
               echo Testing the image using wget
               wget -q -o -127.0.0.1:3000/live | grep live
+          - name: Build Docker Image for testing
+            uses: docker/build-push-action@v6.18.0
+            with:
+               context: .
+               push: true
+               tags: ${{vars.DOCKERHUB_USERNAME}}/solar-system:${{github.sha}}
 
     code-coverage:
         name: code-coverage
