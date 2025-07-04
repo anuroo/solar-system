@@ -30,7 +30,11 @@ jobs:
           uses: actions/setup-node@v4.4.0
           with:
             node-version: ${{matrix.nodejs_version}}
-    
+        - name: cache npm dependencies
+          uses: actions/cache@v4.2.3
+          with:
+            path: node_modules
+            key: ${{runner.os}}-node-modules-${{hashFiles('package-lock.json')}} #cache all dependencies
         - name: Install Dependencies
           run: npm install
     
@@ -44,7 +48,22 @@ jobs:
           uses: actions/upload-artifact@v4.6.2
           with:
             name: Mocha-Test-Result
-            path: test-results.xml
+            path: test-results.
+    docker:
+         needs: [unit-testing,code-coverage]
+         name: Containerization
+         runs-on: ubuntu-latest
+         steps:
+          -  name: checkout repo
+             uses: actions/checkout@v4.2.2
+
+          -  name: DockerHub Login
+             uses: docker/login-action@v3.4.0
+             with:
+               username: ${{vars.DOCKERHUB_USERNAME}}
+               password: ${{secrets.DOCKERHUB_PASSWORD}}
+
+
 
     code-coverage:
         name: code-coverage
